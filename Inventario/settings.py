@@ -73,15 +73,14 @@ WSGI_APPLICATION = 'Inventario.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',   
-        'NAME': 'bdd_Inventario',              
-        'USER': 'root',                   
-        'PASSWORD': '',           
-        'HOST': 'localhost',                     
-        'PORT': '3306',                         
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'bdd_inventario',      
+        'USER': 'postgres',             
+        'PASSWORD': 'cr1st1an',      
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
