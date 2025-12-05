@@ -77,10 +77,10 @@ WSGI_APPLICATION = 'Inventario.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bdd_inventario',      
-        'USER': 'postgres',             
-        'PASSWORD': 'cr1st1an',      
-        'HOST': 'localhost',
+        'NAME': 'bdd_inventario',
+        'USER': 'postgres',
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
