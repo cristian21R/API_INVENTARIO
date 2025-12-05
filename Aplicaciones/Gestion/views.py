@@ -11,11 +11,20 @@ def categoriaEndpoint(request):
             data = json.loads(request.body.decode("utf-8"))
             nombre = data.get("nombre")
             descripcion = data.get("descripcion", "")
+            marca = data.get("marca", "")
+            color = data.get("color", "")
+            modelo = data.get("modelo", "")
 
             if not nombre:
                 return JsonResponse({"error": "Nombre es obligatorio"}, status=400)
 
-            categoria = Categoria.objects.create(nombre=nombre, descripcion=descripcion)
+            categoria = Categoria.objects.create(
+                nombre=nombre,
+                descripcion=descripcion,
+                marca=marca,
+                color=color,
+                modelo=modelo
+            )
             return JsonResponse({"mensaje": "Categoría creada", "id": categoria.id}, status=201)
 
         except Exception as e:
@@ -39,6 +48,9 @@ def categoriaEndpoint(request):
 
             categoria.nombre = data.get("nombre", categoria.nombre)
             categoria.descripcion = data.get("descripcion", categoria.descripcion)
+            categoria.marca = data.get("marca", categoria.marca)
+            categoria.color = data.get("color", categoria.color)
+            categoria.modelo = data.get("modelo", categoria.modelo)
             categoria.save()
 
             return JsonResponse({"mensaje": "Categoría actualizada"})
@@ -71,9 +83,10 @@ def productoEndpoint(request):
             descripcion = data.get("descripcion", "")
             precio = data.get("precio")
             categoria_id = data.get("categoria")
+            stock = data.get("stock", 0)
 
             if not nombre or precio is None or categoria_id is None:
-                return JsonResponse({"error": "Todos los campos son obligatorios"}, status=400)
+                return JsonResponse({"error": "Nombre, precio y categoría son obligatorios"}, status=400)
 
             try:
                 categoria = Categoria.objects.get(id=categoria_id)
@@ -84,7 +97,8 @@ def productoEndpoint(request):
                 nombre=nombre,
                 descripcion=descripcion,
                 precio=precio,
-                categoria=categoria
+                categoria=categoria,
+                stock=stock
             )
 
             return JsonResponse({"mensaje": "Producto creado", "id": producto.id}, status=201)
@@ -93,7 +107,9 @@ def productoEndpoint(request):
             return JsonResponse({"error": str(e)}, status=500)
 
     elif request.method == "GET":
-        productos = Producto.objects.all().values()
+        productos = Producto.objects.all().values(
+            'id', 'nombre', 'descripcion', 'precio', 'stock', 'categoria_id'
+        )
         return JsonResponse(list(productos), safe=False)
 
     elif request.method == "PUT":
@@ -111,6 +127,7 @@ def productoEndpoint(request):
             producto.nombre = data.get("nombre", producto.nombre)
             producto.descripcion = data.get("descripcion", producto.descripcion)
             producto.precio = data.get("precio", producto.precio)
+            producto.stock = data.get("stock", producto.stock)
 
             if "categoria" in data:
                 try:
